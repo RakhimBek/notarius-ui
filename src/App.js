@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import SockJsClient from "react-stomp";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    let [ref, setRef] = useState(null);
+    let [messages, setMessages] = useState(['fvrtb', 'rtbt']);
+    let [value, setValue] = useState("");
+
+    let onKeyDown = (e) => {
+        if (e.keyCode === 13 && e.shiftKey === false) {
+            ref.sendMessage('/app/message', value);
+            setValue('');
+        }
+    };
+
+    let onChange = (e) => {
+        setValue(e.target.value)
+    }
+
+    return (
+        <div className="App">
+            <header className="App-header">
+                <input onChange={onChange} onKeyDown={onKeyDown} style={{minWidth: "100hv"}} value={value} />
+            </header>
+            <div className="app-body">
+                {messages.map(x => <p key={x}>{x}</p>)}
+                <SockJsClient url='https://notarius-api.herokuapp.com/chat' topics={['/topic']}
+                              onMessage={(msg) => {
+                                  console.log(msg)
+
+                                  setMessages([msg, ...messages]);
+                              }}
+                              ref={(client) => {
+                                  setRef(client);
+                              }}/>
+            </div>
+        </div>
+    );
 }
 
 export default App;
