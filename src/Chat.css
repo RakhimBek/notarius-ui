@@ -1,0 +1,23 @@
+.chat {
+    background-color: azure;
+    position: absolute;
+    min-width: 300px;
+    min-height: 300px;
+    top: 100px;
+    left: 100px;
+    overflow: hidden;
+    border: medium double darkblue;
+}
+
+
+.chat .send {
+    position: absolute;
+    bottom: 0;
+    min-width: 300px;
+}
+
+.chat .messages {
+    position: absolute;
+    bottom: 20px;
+    min-width: 300px;
+}
